@@ -1,4 +1,5 @@
-﻿using SqlServerNewApplication.Model;
+﻿using Microsoft.Extensions.Configuration;
+using SqlServerNewApplication.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -7,24 +8,23 @@ using System.Threading.Tasks;
 
 namespace SqlServerNewApplication.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-        private static string db_source = "sqlappservernew.database.windows.net";
-        private static string db_user = "sqladmin";
-        private static string db_password = "NewP@ssword245!";
-        private static string db_database = "sqlappserver";
+        private readonly IConfiguration configuration;
+
+
+        public ProductService(IConfiguration configuration)
+        {
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
 
         private SqlConnection GetConnection()
         {
 
 
 
-            var _builder = new SqlConnectionStringBuilder();
-            _builder.DataSource = db_source;
-            _builder.UserID = db_user;
-            _builder.Password = db_password;
-            _builder.InitialCatalog = db_database;
-            return new SqlConnection(_builder.ConnectionString);
+
+            return new SqlConnection(configuration.GetConnectionString("SqlConnection"));
         }
         public List<Product> GetProducts()
         {

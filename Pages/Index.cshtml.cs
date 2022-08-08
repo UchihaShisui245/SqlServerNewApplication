@@ -13,16 +13,18 @@ namespace SqlServerNewApplication.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
+        private readonly IProductService _productService;
         public List<Product> Products;
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, IProductService productService)
         {
             _logger = logger;
+            _productService = productService;
         }
 
         public void OnGet()
         {
-            ProductService service = new ProductService();
-            Products = service.GetProducts();
+       
+            Products = _productService.GetProducts();
         }
     }
 }
